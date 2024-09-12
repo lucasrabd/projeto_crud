@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/f7cdcded-c5c5-4069-8555-752d85612a04/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/python-bot-sprint-3",
+    "appService.deploySubpath": "."
+}
