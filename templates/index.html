@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Cliente e Pedidos</title>
+</head>
+<body>
+    <h1>Gerenciar Clientes e Pedidos</h1>
+
+    <!-- Formulário para adicionar clientes -->
+    <h2>Adicionar Cliente</h2>
+    <form id="clienteForm">
+        <input type="number" id="clienteID" placeholder="ID do Cliente" required>
+        <input type="text" id="clienteNome" placeholder="Nome" required>
+        <input type="email" id="clienteEmail" placeholder="Email" required>
+        <button type="submit">Adicionar Cliente</button>
+    </form>
+
+    <h2>Clientes</h2>
+    <ul id="clientesList"></ul>
+
+    <!-- Formulário para adicionar pedidos -->
+    <h2>Adicionar Pedido</h2>
+    <form id="pedidoForm">
+        <input type="number" id="pedidoID" placeholder="ID do Pedido" required>
+        <input type="number" id="clientePedidoID" placeholder="ID do Cliente" required>
+        <input type="text" id="descricaoPedido" placeholder="Descrição" required>
+        <input type="date" id="dataPedido" required>
+        <button type="submit">Adicionar Pedido</button>
+    </form>
+
+    <h2>Pedidos</h2>
+    <ul id="pedidosList"></ul>
+
+    <script>
+        document.getElementById('clienteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const cliente = {
+                ClienteID: document.getElementById('clienteID').value,
+                Nome: document.getElementById('clienteNome').value,
+                Email: document.getElementById('clienteEmail').value
+            };
+            fetch('/clientes', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(cliente)
+            }).then(response => {
+                if (response.status === 201) {
+                    alert('Cliente adicionado com sucesso!');
+                    location.reload();
+                }
+            });
+        });
+
+        document.getElementById('pedidoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const pedido = {
+                PedidoID: document.getElementById('pedidoID').value,
+                ClienteID: document.getElementById('clientePedidoID').value,
+                Descricao: document.getElementById('descricaoPedido').value,
+                DataPedido: document.getElementById('dataPedido').value
+            };
+            fetch('/pedidos', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(pedido)
+            }).then(response => {
+                if (response.status === 201) {
+                    alert('Pedido adicionado com sucesso!');
+                    location.reload();
+                }
+            });
+        });
+
+        function carregarClientes() {
+            fetch('/clientes')
+                .then(response => response.json())
+                .then(clientes => {
+                    const lista = document.getElementById('clientesList');
+                    clientes.forEach(cliente => {
+                        const li = document.createElement('li');
+                        li.textContent = `${cliente[1]} (${cliente[2]})`;
+                        lista.appendChild(li);
+                    });
+                });
+        }
+
+        function carregarPedidos() {
+            fetch('/pedidos')
+                .then(response => response.json())
+                .then(pedidos => {
+                    const lista = document.getElementById('pedidosList');
+                    pedidos.forEach(pedido => {
+                        const li = document.createElement('li');
+                        li.textContent = `${pedido[1]} - ${pedido[2]} (${pedido[3]})`;
+                        lista.appendChild(li);
+                    });
+                });
+        }
+
+        carregarClientes();
+        carregarPedidos();
+    </script>
+</body>
+</html>
