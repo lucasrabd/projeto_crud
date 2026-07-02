@@ -1,11 +1,14 @@
+import os
 import pyodbc
 
+
 def get_db_connection():
-    # Configuração da cadeia de conexão
-    server = 'server-sql-sprint3-rm550519.database.windows.net'
-    database = 'API-NET-SPRINT3-SQLDB'
-    username = 'adm-sqldb-dimdim'
-    password = 'Fiap@2tdsdb'  # Senha fornecida
+    # Configuração da cadeia de conexão — lida de variáveis de ambiente,
+    # nunca deixe usuário/senha reais direto no código versionado.
+    server = os.environ.get('DB_SERVER', 'seu-servidor.database.windows.net')
+    database = os.environ.get('DB_NAME', 'sua-database')
+    username = os.environ.get('DB_USER', 'seu-usuario')
+    password = os.environ.get('DB_PASSWORD', 'sua-senha')
     driver = '{ODBC Driver 18 for SQL Server}'  # Certifique-se de que o driver correto está instalado
 
     try:
